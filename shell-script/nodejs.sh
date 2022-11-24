@@ -3,7 +3,9 @@
 if [ $# -ne 1 ];then
   echo "Pass single parameter"
   exit 1
-elif
+fi
+
+if [ -n $1 ];then
   nodever=$(echo "node-14-xx-lts" | grep -e "node-[1-9][0-9]-xx-lts" | grep -v grep | awk -F'-' '{print $2}')
   echo "Installing node $nodever.x"
 else
