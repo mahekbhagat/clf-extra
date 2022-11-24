@@ -6,6 +6,7 @@ if [ $# -ne 1 ];then
 fi
 
 if [ -n $1 ];then
+  echo "paramater: $1"  >> /var/log/userdatainstall.log
   nodever=$(echo "node-14-xx-lts" | grep -e "node-[1-9][0-9]-xx-lts" | grep -v grep | awk -F'-' '{print $2}')
   echo "Installing node $nodever.x"
 else
