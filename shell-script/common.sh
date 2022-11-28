@@ -42,7 +42,7 @@ if [ "$webser" != "No" ] && [ ! -z $nodever ];then
   if [ "$webser" != "apache2" ];then
     echo "Stop and disable default apache2"
     systemctl stop apache2 && systemctl disable apache2
-  if
+  fi
   echo "Installing $webser"
   sudo apt install -y $webser
 fi
