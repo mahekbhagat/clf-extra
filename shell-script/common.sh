@@ -1,5 +1,14 @@
 #!/bin/bash -e
 
+##
+## Created By: Mahek Bhagat
+## Last Modified By: Mahek Bhagat
+## Created Date: 2022-11-25
+## Last Modified Dtae: 2022-11-27
+## Purpose: Install node, php or nginx from cloud formation
+## ./common.sh "node=Node-<version>-lts,php=php-<version>,webserver=<Nginx|Apache2>"
+
+## 
 if [ $# -ne 1 ] || [ -z $1 ];then
   echo "Pass minimum one and valid argument"
   exit 1
@@ -19,7 +28,7 @@ webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "we
 ## Installing essential packages
 sudo apt install --yes software-properties-common
 
-##
+## Node
 if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
   echo "Installing node v$nodever.x"
   curl -sL https://deb.nodesource.com/setup_$nodever.x -o nodesource_setup.sh
@@ -28,7 +37,7 @@ if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
   node --version
 fi
 
-##
+## PHP
 if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
 
   sudo add-apt-repository --yes ppa:ondrej/php
@@ -43,7 +52,7 @@ if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
   sudo needrestart -u NeedRestart::UI::stdio -r a
 fi
 
-##
+## Webserver
 if [ "$webser" != "No" ] && [ ! -z $nodever ];then
 
   if [ "$webser" != "apache2" ];then
