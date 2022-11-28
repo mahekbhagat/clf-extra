@@ -5,9 +5,9 @@ if [ $# -ne 1 ] || [ -z $1 ];then
   exit 1
 fi
 
-nodever=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep -e "node-[1-9][0-9]-xx-lts" | grep -v grep | awk -F'-' '{print $2}')
-phpver=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep -e "[1-9]\{1,2\}-[0-9]" | grep -v grep | sed 's/php//g' | sed 's/-/./g')
-webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep -e "Nginx\|Apache2" | grep -v grep | awk '{print tolower($0)}')
+nodever=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "node" | grep -v grep | awk -F'=' '{print $2}' | awk -F'-' '{print $2}')
+phpver=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "php" | grep -v grep |awk -F'=' '{print $2}' | sed 's/php//g' | sed 's/-/./g')
+webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "webserver" | grep -v grep | awk -F'=' '{print $2}' | awk '{print tolower($0)}')
 
 ## Intalling essential packages
 sudo apt install --yes software-properties-common
@@ -33,7 +33,7 @@ if [ "$phpver" != "No" ];then
 
   phpmodules="common,fpm,json,cli,zip,bz2,mysql,xmlrpc,dev,imap,gd,xml,opcache,mcrypt,bcmath,curl,intl,mbstring,soap,xsl,imagick,cgi,mongodb"
   echo "Installing PHP-$phpver modules"
-  echo "$phpmodules" | awk -F ',' '{ for (i=1; i<=NF; i++) system("sudo apt install --yes php'$phpver'-" $i) }'
+  echo "$phpmodules" | awk -F ',' '{ for (i=1; i<=NF; i++) system("sudo apt install -y php'$phpver'-" $i) }'
 fi
 
 ##
