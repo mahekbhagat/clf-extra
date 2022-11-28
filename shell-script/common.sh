@@ -38,7 +38,7 @@ if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
 fi
 
 ## PHP
-if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
+if [ "$phpver" != "No" ] && [ ! -z $phpver ];then
 
   sudo add-apt-repository --yes ppa:ondrej/php
   sudo apt install -y php$phpver
@@ -53,7 +53,7 @@ if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
 fi
 
 ## Webserver
-if [ "$webser" != "No" ] && [ ! -z $nodever ];then
+if [ "$webser" != "No" ] && [ ! -z $webser ];then
 
   if [ "$webser" != "apache2" ];then
     echo "Stop and disable default apache2"
