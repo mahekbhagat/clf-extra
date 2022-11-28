@@ -33,7 +33,8 @@ if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
 
   phpmodules="common,fpm,json,cli,zip,bz2,mysql,xmlrpc,dev,imap,gd,xml,opcache,mcrypt,bcmath,curl,intl,mbstring,soap,xsl,imagick,cgi,mongodb"
   echo "Installing PHP-$phpver modules"
-  echo "$phpmodules" | awk -F ',' '{ for (i=1; i<=NF; i++) system("sudo apt install -y php'$phpver'-" $i) }'
+  echo "$phpmodules" | awk -F ',' '{ for (i=1; i<=NF; i++) system("sudo apt install -y php'$phpver'-" $i ) }'
+  sudo needrestart -u NeedRestart::UI::stdio -r a
 fi
 
 ##
@@ -46,3 +47,6 @@ if [ "$webser" != "No" ] && [ ! -z $nodever ];then
   echo "Installing $webser"
   sudo apt install -y $webser
 fi
+
+echo "reboot machine"
+sudo reboot now
