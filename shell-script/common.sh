@@ -9,11 +9,11 @@ nodever=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "n
 phpver=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "php" | grep -v grep |awk -F'=' '{print $2}' | sed 's/php//g' | sed 's/-/./g')
 webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "webserver" | grep -v grep | awk -F'=' '{print $2}' | awk '{print tolower($0)}')
 
-## Intalling essential packages
+## Installing essential packages
 sudo apt install --yes software-properties-common
 
 ##
-if [ "$nodever" != "No" ];then
+if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
   echo "Installing node v$nodever.x"
   curl -sL https://deb.nodesource.com/setup_$nodever.x -o nodesource_setup.sh
   sudo bash nodesource_setup.sh
@@ -22,7 +22,7 @@ if [ "$nodever" != "No" ];then
 fi
 
 ##
-if [ "$phpver" != "No" ];then
+if [ "$phpver" != "No" ] && [ ! -z $nodever ];then
 
   export NEEDRESTART_MODE=a
   export DEBIAN_FRONTEND=noninteractive
@@ -37,8 +37,12 @@ if [ "$phpver" != "No" ];then
 fi
 
 ##
-if [ "$webser" != "No" ];then
+if [ "$webser" != "No" ] && [ ! -z $nodever ];then
 
+  if [ "$webser" != "apache2" ];then
+    echo "Stop and disable default apache2"
+    systemctl stop apache2 && systemctl disable apache2
+  if
   echo "Installing $webser"
   sudo apt install -y $webser
 fi
