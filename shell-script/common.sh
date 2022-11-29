@@ -26,7 +26,7 @@ phpver=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "ph
 webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "webserver" | grep -v grep | awk -F'=' '{print $2}' | awk '{print tolower($0)}')
 
 ## Installing essential packages
-sudo apt install --yes software-properties-common
+#sudo apt install --yes software-properties-common
 
 ## Node
 if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
