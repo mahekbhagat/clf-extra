@@ -62,6 +62,3 @@ if [ "$webser" != "No" ] && [ ! -z $webser ];then
   echo "Installing $webser"
   sudo apt install -y $webser
 fi
-
-echo "reboot machine"
-sudo reboot now
