@@ -4,7 +4,7 @@
 ## Created By: Mahek Bhagat
 ## Last Modified By: Mahek Bhagat
 ## Created Date: 2022-11-25
-## Last Modified Dtae: 2022-11-27
+## Last Modified Dtae: 2022-11-28
 ## Purpose: Install node, php or nginx from cloud formation
 ## ./common.sh "node=Node-<version>-lts,php=php-<version>,webserver=<Nginx|Apache2>"
 
