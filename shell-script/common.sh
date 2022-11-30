@@ -30,10 +30,12 @@ webser=$(echo "$1" | awk -F ',' '{  for (i=1; i<=NF; i++) print $i }' | grep "we
 
 ## Node
 if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
+  cd /tmp/
   echo "Installing node v$nodever.x"
   curl -sL https://deb.nodesource.com/setup_$nodever.x -o nodesource_setup.sh
   sudo bash nodesource_setup.sh
   sudo apt-get install -y nodejs
+  sudo npm install -g pm2
   node --version
 fi
 
@@ -58,6 +60,7 @@ if [ "$webser" != "No" ] && [ ! -z $webser ];then
   if [ "$webser" != "apache2" ];then
     echo "Stop and disable default apache2"
     systemctl stop apache2 && systemctl disable apache2
+    rm -rf /var/www/html/index.html
   fi
   echo "Installing $webser"
   sudo apt install -y $webser
