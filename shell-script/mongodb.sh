@@ -5,11 +5,6 @@ if [ $# -ne 1 ] || [ -z $1 ];then
   exit 1
 fi
 
-if [ "$(echo $1 | sed 's/,/\n/g' | wc -l)" -ne 5 ];then
-  echo "Please pass all 5 value in argument sperated by comma"
-  exit 0
-fi
-# echo "DatabaseType=Mongodb,DBName=test1,DBUser1=mahek,DBUser1Password=mahek123" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}'
 
 ## DB Type
 DatabaseType= $(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}')
@@ -18,6 +13,12 @@ if [ "$DatabaseType" != "MongoDB" ];then
   echo "DB type not mongodb"
   exit 0
 fi
+
+if [ "$(echo $1 | sed 's/,/\n/g' | wc -l)" -ne 5 ];then
+  echo "Please pass all 5 value in argument sperated by comma"
+  exit 0
+fi
+# echo "DatabaseType=Mongodb,DBName=test1,DBUser1=mahek,DBUser1Password=mahek123" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}'
 
 ## User1
 DBName=$(echo "$1" | sed 's/,/\n/g' | grep -i DBName | awk -F'=' '{print $2}')
