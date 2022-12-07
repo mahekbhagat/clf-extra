@@ -70,20 +70,21 @@ systemctl enable mongod
 ##
 ## create user
 
-if [ $(grep -i "^security:" $mongoconf | wc -l) -ne 1 ];then
-  echo "security:" >> $mongoconf
-  echo "  authorization: \"enabled\"" >> $mongoconf
-fi
-
-mongosh --quiet --eval <<EOF
+mongosh --quiet --eval << EOF
   use ${DBName}
   db.createUser({ user: "${DBUser1}", pwd: "${DBUser1Password}", roles: [ { role: "readWrite", db: "${DBName}" } ]})
 EOF
 
 ## Create admin user
-mongosh --quiet --eval <<EOF
+mongosh --quiet --eval << EOF
   use admin
   db.createUser({ user: "admin" , pwd: "${DBAdminPassword}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
 EOF
+
+## Enable security
+if [ $(grep -i "^security:" $mongoconf | wc -l) -ne 1 ];then
+  echo "security:" >> $mongoconf
+  echo "  authorization: \"enabled\"" >> $mongoconf
+fi
 
 # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
