@@ -7,7 +7,7 @@ fi
 
 
 ## DB Type
-DatabaseType= $(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}')
+DatabaseType=$(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}')
 
 if [ "$DatabaseType" != "MongoDB" ];then
   echo "DB type not mongodb"
