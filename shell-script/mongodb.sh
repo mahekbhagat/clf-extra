@@ -48,7 +48,7 @@ echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 mongoconf="/etc/mongod.conf"
 TotalMemory=`free --giga | grep -i "Mem" | awk '{print $2}'`
 divideby=4
-memallocate=$(printf "%0.2f\n" $(echo "scale=1; $TotalMemory / $divideby" | bc))
+memallocate=$(printf "%0.2f\n" $(echo "scale=2; $TotalMemory / $divideby" | bc))
 echo "$memallocate"
 
 if [ $(grep -i '^  journal:' $mongoconf | wc -l) -eq 1 ];then
