@@ -9,23 +9,24 @@ if [ "$(echo $1 | sed 's/,/\n/g' | wc -l)" -ne 5 ];then
   echo "Please pass all 5 value in argument sperated by comma"
   exit 0
 fi
-# echo "DB_TYPE=Mongodb,DB_USER1=mahek,DB_PWD1=mahek123,DB_NM1=test1" | sed 's/,/\n/g' | grep -i DB_TYPE | awk -F'=' '{print $2}'
+# echo "DatabaseType=Mongodb,DBName=test1,DBUser1=mahek,DBUser1Password=mahek123" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}'
 
 ## DB Type
-DB_TYPE= $(echo "$1" | sed 's/,/\n/g' | grep -i DB_TYPE | awk -F'=' '{print $2}')
+DatabaseType= $(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}')
 
-if [ "$DB_TYPE" != "MongoDB" ];then
+if [ "$DatabaseType" != "MongoDB" ];then
   echo "DB type not mongodb"
   exit 0
 fi
 
 ## User1
-DB_USER1=$(echo "$1" | sed 's/,/\n/g' | grep -i DB_USER1 | awk -F'=' '{print $2}')
-DB_PWD1=$(echo "$1" | sed 's/,/\n/g' | grep -i DB_PWD1 | awk -F'=' '{print $2}')
-DB_NM1=$(echo "$1" | sed 's/,/\n/g' | grep -i DB_NM1 | awk -F'=' '{print $2}')
+DBName=$(echo "$1" | sed 's/,/\n/g' | grep -i DBName | awk -F'=' '{print $2}')
+DBUser1=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1 | awk -F'=' '{print $2}')
+DBUser1Password=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1Password | awk -F'=' '{print $2}')
 
-## Admin user
-DB_PWD2=$(echo "$1" | sed 's/,/\n/g' | grep -i DB_PWD2 | awk -F'=' '{print $2}')
+
+## Admin user Password
+DBAdminPassword=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminPassword | awk -F'=' '{print $2}')
 
 ## Ubuntu code name
 os_code=`cat /etc/os-release | grep -i "UBUNTU_CODENAME" | awk -F'=' '{print $2}'`
@@ -74,14 +75,14 @@ if [ $(grep -i "^security:" $mongoconf | wc -l) -ne 1 ];then
 fi
 
 mongosh --quiet --eval <<EOF
-  use ${DB_NM1}
-  db.createUser({ user: "${DB_USER1}", pwd: "${DB_PWD1}", roles: [ { role: "readWrite", db: "${DB_NM1}" } ]})
+  use ${DBName}
+  db.createUser({ user: "${DBUser1}", pwd: "${DBUser1Password}", roles: [ { role: "readWrite", db: "${DBName}" } ]})
 EOF
 
 ## Create admin user
 mongosh --quiet --eval <<EOF
   use admin
-  db.createUser({ user: "admin" , pwd: "${DB_PWD2}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
+  db.createUser({ user: "admin" , pwd: "${DBAdminPassword}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
 EOF
 
 # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
