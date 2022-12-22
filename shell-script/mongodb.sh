@@ -25,6 +25,8 @@ DBName=$(echo "$1" | sed 's/,/\n/g' | grep -i DBName | awk -F'=' '{print $2}')
 DBUser1=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1 | awk -F'=' '{print $2}')
 DBUser1Password=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1Password | awk -F'=' '{print $2}')
 
+## Admin user Password
+DBAdminUser=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminUser | awk -F'=' '{print $2}')
 
 ## Admin user Password
 DBAdminPassword=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminPassword | awk -F'=' '{print $2}')
