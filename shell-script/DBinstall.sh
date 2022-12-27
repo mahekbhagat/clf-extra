@@ -7,7 +7,7 @@ fi
 
 
 ## DB Type
-DatabaseType=$(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}')
+DatabaseType=$(echo "$1" | sed 's/,/\n/g' | grep -i DatabaseType= | awk -F'=' '{print $2}')
 
 if [ "$DatabaseType" != "MongoDB" ] && [ "$DatabaseType" != "MYSQL" ];then
   echo "Selected DB type not mongodb or mysql"
@@ -18,17 +18,17 @@ fi
 # echo "DatabaseType=Mongodb,DBName=test1,DBUser1=mahek,DBUser1Password=mahek123" | sed 's/,/\n/g' | grep -i DatabaseType | awk -F'=' '{print $2}'
 
 ## User1
-DBName=$(echo "$1" | sed 's/,/\n/g' | grep -i DBName | awk -F'=' '{print $2}')
-DBUser1=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1 | awk -F'=' '{print $2}')
-DBUser1Password=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1Password | awk -F'=' '{print $2}')
+DBName=$(echo "$1" | sed 's/,/\n/g' | grep -i DBName= | awk -F'=' '{print $2}')
+DBUser1=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1= | awk -F'=' '{print $2}')
+DBUser1Password=$(echo "$1" | sed 's/,/\n/g' | grep -i DBUser1Password= | awk -F'=' '{print $2}')
 
 ## Admin user Password
-DBAdminUser=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminUser | awk -F'=' '{print $2}')
+DBAdminUser=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminUser= | awk -F'=' '{print $2}')
 
 ## Admin user Password
-DBAdminPassword=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminPassword | awk -F'=' '{print $2}')
+DBAdminPassword=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminPassword= | awk -F'=' '{print $2}')
 
-DBEndpoint=$(echo "$1" | sed 's/,/\n/g' | grep -i DBEndpoint | awk -F'=' '{print $2}')
+DBEndpoint=$(echo "$1" | sed 's/,/\n/g' | grep -i DBEndpoint= | awk -F'=' '{print $2}')
 ##
 if [ "$DatabaseType" == "MongoDB" ];then
   if [ "$(echo $1 | sed 's/,/\n/g' | wc -l)" -ne 5 ];then
@@ -77,13 +77,13 @@ if [ "$DatabaseType" == "MongoDB" ];then
   ##
   ## create user
 
-mongosh --quiet --eval <<-EOF
+mongosh --quiet --eval <<EOF
   use ${DBName}
   db.createUser({ user: "${DBUser1}", pwd: "${DBUser1Password}", roles: [ { role: "readWrite", db: "${DBName}" } ]})
 EOF
 
 ## Create admin user
-mongosh --quiet --eval <<-EOF
+mongosh --quiet --eval <<EOF
   use admin
   db.createUser({ user: "admin" , pwd: "${DBAdminPassword}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
 EOF
@@ -97,11 +97,9 @@ EOF
   # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 elif [ "$DatabaseType" == "MYSQL" ];then
 
-mysql -h"${DBEndpoint}" -u${DBAdminUser} -p${DBAdminPassword} <<EOF
-  CREATE USER "${DBUser1}"@'%' IDENTIFIED WITH mysql_native_password BY "'${DBUser1Password}'";
-  GRANT ALL PRIVILEGES ON `%`.* To "'${DBUser1}'"@'%';
-  FLUSH PRIVILEGES;
-EOF
+  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "CREATE USER '${DBUser1}'@'%' IDENTIFIED WITH mysql_native_password BY '${DBUser1Password}';"
+  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "GRANT ALL PRIVILEGES ON `%`.* To '${DBUser1}'@'%';"
+  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "FLUSH PRIVILEGES;"
 
 else
   echo "Wrong database type value passed"
