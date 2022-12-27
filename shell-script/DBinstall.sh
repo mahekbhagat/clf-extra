@@ -77,13 +77,13 @@ if [ "$DatabaseType" == "MongoDB" ];then
   ##
   ## create user
 
-	mongosh --quiet --eval <<-'EOF'
+	mongosh --quiet --eval <<-EOF
 		use ${DBName}
 		db.createUser({ user: "${DBUser1}", pwd: "${DBUser1Password}", roles: [ { role: "readWrite", db: "${DBName}" } ]})
 	EOF
 
   ## Create admin user
-	mongosh --quiet --eval <<-'EOF'
+	mongosh --quiet --eval <<-EOF
 		use admin
 		db.createUser({ user: "admin" , pwd: "${DBAdminPassword}", roles: ["userAdminAnyDatabase", "dbAdminAnyDatabase", "readWriteAnyDatabase"]})
 	EOF
@@ -97,7 +97,7 @@ if [ "$DatabaseType" == "MongoDB" ];then
   # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 elif [ "$DatabaseType" == "MYSQL" ];then
 
-	mysql -h"${DBEndpoint}" -u${DBAdminUser} -p${DBAdminPassword} <<-'EOF'
+	mysql -h"${DBEndpoint}" -u${DBAdminUser} -p${DBAdminPassword} <<-EOF
 		CREATE USER "${DBUser1}"@'%' IDENTIFIED WITH mysql_native_password BY "'${DBUser1Password}'";
 		GRANT ALL PRIVILEGES ON `%`.* To "'${DBUser1}'"@'%';
 		FLUSH PRIVILEGES;
