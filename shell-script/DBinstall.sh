@@ -30,7 +30,7 @@ DBAdminPassword=$(echo "$1" | sed 's/,/\n/g' | grep -i DBAdminPassword= | awk -F
 
 DBEndpoint=$(echo "$1" | sed 's/,/\n/g' | grep -i DBEndpoint= | awk -F'=' '{print $2}')
 ##
-if [ "$DatabaseType" == "MongoDB" ];then
+if [ "${DatabaseType}" == "MongoDB" ];then
   if [ "$(echo $1 | sed 's/,/\n/g' | wc -l)" -ne 5 ];then
     echo "Please pass all 5 value in argument sperated by comma"
     exit 0
@@ -95,11 +95,12 @@ EOF
   fi
 
   # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
-elif [ "$DatabaseType" == "MYSQL" ];then
+elif [ "${DatabaseType}" == "MYSQL" ];then
+  echo "CREATE USER '${DBUser1}'@'%' IDENTIFIED WITH mysql_native_password BY '${DBUser1Password}';" > /tmp/createuser.sql
+  echo "GRANT ALL PRIVILEGES ON `%`.* To '${DBUser1}'@'%';" >> /tmp/createuser.sql
+  echo "FLUSH PRIVILEGES;" >> /tmp/createuser.sql
 
-  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "CREATE USER '${DBUser1}'@'%' IDENTIFIED WITH mysql_native_password BY '${DBUser1Password}';"
-  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "GRANT ALL PRIVILEGES ON `%`.* To '${DBUser1}'@'%';"
-  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" -e "FLUSH PRIVILEGES;"
+  mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" < /tmp/createuser.sql
 
 else
   echo "Wrong database type value passed"
