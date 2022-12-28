@@ -15,7 +15,7 @@ apt-get install -y build-essential python3-pip python3-setuptools needrestart
 
 # Restart any pending service
 needrestart -u NeedRestart::UI::stdio -r a
-pip install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz
+pip3 install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-py3-latest.tar.gz
 
 if [ $? -eq 0 ];then
   echo "Successfully installed aws-cfn-bootstrap-py3"
