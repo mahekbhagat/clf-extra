@@ -96,8 +96,10 @@ EOF
 
   # mongo --eval 'db.runCommand({ connectionStatus: 1 })'
 elif [ "${DatabaseType}" == "MYSQL" ];then
-  echo "CREATE USER IF NOT EXISTS '${DBUser1}'@'%' IDENTIFIED WITH mysql_native_password BY '${DBUser1Password}';" > /tmp/createuser.sql
-  echo "GRANT ALL PRIVILEGES ON \`%\`.* To '${DBUser1}'@'%';" >> /tmp/createuser.sql
+#  echo "CREATE USER IF NOT EXISTS '${DBUser1}'@'%' IDENTIFIED WITH mysql_native_password BY '${DBUser1Password}';" > /tmp/createuser.sql
+#  echo "GRANT ALL PRIVILEGES ON \`%\`.* To '${DBUser1}'@'%';" >> /tmp/createuser.sql
+  echo "CREATE USER IF NOT EXISTS '${DBUser1}'@'%' IDENTIFIED BY '${DBUser1Password}';" > /tmp/createuser.sql
+  echo "GRANT ALL PRIVILEGES ON \`${DBName}\`.* To '${DBUser1}'@'%';" >> /tmp/createuser.sql
   echo "FLUSH PRIVILEGES;" >> /tmp/createuser.sql
 
   mysql -h"${DBEndpoint}" -u"${DBAdminUser}" -p"${DBAdminPassword}" < /tmp/createuser.sql
