@@ -12,6 +12,7 @@ export NEEDRESTART_MODE=a
 export DEBIAN_FRONTEND=noninteractive
 
 apt-get install -y build-essential python3-pip python3-setuptools net-tools zip needrestart
+apt upgrade -y
 
 # Restart any pending service
 needrestart -u NeedRestart::UI::stdio -r a
