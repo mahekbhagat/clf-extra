@@ -35,6 +35,7 @@ if [ "$nodever" != "No" ] && [ ! -z $nodever ];then
   curl -sL https://deb.nodesource.com/setup_$nodever.x -o nodesource_setup.sh
   sudo bash nodesource_setup.sh
   sudo apt-get install -y nodejs
+  sudo cp /var/cache/apt/archives/nodejs_*-1nodesource1_amd64.deb /opt/  2>/dev/null || :
   sudo npm install -g pm2
   node --version
 fi
